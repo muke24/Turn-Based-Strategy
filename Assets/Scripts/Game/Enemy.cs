@@ -4,28 +4,48 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-	public GameObject enemyGameObject;
-
+	[Header("Enemy Health")]
 	public float maxHealth = 100f;
 	public float curHealth = 100f;
 
+	[Header("Enemy GameObject")]
+	[Space(10)]
+	public GameObject enemyGameObject;
+
+	[Header("Transforms To Parent Attacks/Blocks to")]
+	[Space(10)]
 	public Transform attackSpawnPos;
 	public Transform blockSpawnPos;
+
+	[Header("Attack/Block GameObject Prefabs")]
+	[Space(10)]
 	public GameObject attact1;
 	public GameObject attact2;
 	public GameObject block1;
 	public GameObject block2;
 
-	public int playersChosenAttack = 0; // 1 is attack1, 2 is attack2
-	public int playersChosenBlock = 0; // 1 is block1, 2 is block2
+	[Header("The Attack/Block That The Player Has Chosen")]
+	[Space(10)]
+	//* 1 is attack1, 2 is attack2, 0 is null
+	public int playersChosenAttack = 0;
+	//* 1 is block1, 2 is block2, 0 is null
+	public int playersChosenBlock = 0;
 
+	[Header("If The Attack The Player Just Used Was Effective")]
+	[Space(10)]
 	public bool wasEffective = false;
 
+	[Header("Player's Health Slider")]
+	[Space(10)]
 	public Slider playerSlider;
 
+	[Header("Damage Dealt From Each Attack")]
+	[Space(10)]
 	public float attack1Damage = 20f;
 	public float attack2Damage = 30f;
 
+	[Header("Time Between Each Play")]
+	[Space(10)]
 	[SerializeField]
 	private float timerLength = 3f;
 
@@ -61,15 +81,19 @@ public class Enemy : MonoBehaviour
 			StartCoroutine("Timer");
 		}
 
-		if (player.wasEffective)
+		if (playersChosenBlock == 1)
 		{
 			float randomisedDamage = Random.Range(-2.5f, 2.5f);
 			player.curHealth -= randomisedDamage + attack1Damage;
+
+			player.wasEffective = false;
 		}
 		else
 		{
 			float randomisedDamage = Random.Range(-1f, 1f);
 			player.curHealth -= randomisedDamage + (attack1Damage / 3);
+
+			player.wasEffective = true;
 		}
 
 		playerSlider.value = player.curHealth;
@@ -104,10 +128,12 @@ public class Enemy : MonoBehaviour
 			StartCoroutine("Timer");
 		}
 
-		if (player.wasEffective)
+		if (playersChosenBlock == 2)
 		{
 			float randomisedDamage = Random.Range(-5f, 5f);
 			player.curHealth -= randomisedDamage + attack2Damage;
+
+			player.wasEffective = false;
 		}
 		else
 		{
@@ -116,6 +142,8 @@ public class Enemy : MonoBehaviour
 			{
 				player.curHealth = player.maxHealth;
 			}
+
+			player.wasEffective = true;
 		}
 
 		playerSlider.value = player.curHealth;
@@ -191,7 +219,7 @@ public class Enemy : MonoBehaviour
 			{
 				startTimer = false;
 				if (!lost)
-				{					
+				{
 					yield return new WaitForSeconds(timerLength);
 				}
 				else
