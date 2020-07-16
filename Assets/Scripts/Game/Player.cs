@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
 
 	public bool wasEffective = false;
 
-	public Slider playerSlider;
 	public Slider enemySlider;
 
 	public float attack1Damage = 20f;
@@ -30,11 +29,10 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private float timerLength = 3f;
 	[SerializeField]
-	private Text hitEffectiveText;
+	private Text hitEffectiveText = null;
 
 	private bool startTimer = true;
 	private bool won = false;
-	private bool lost = false;
 
 	public void Attack1()
 	{
@@ -97,11 +95,11 @@ public class Player : MonoBehaviour
 		enemy.playersChosenAttack = 2;
 		enemy.ChooseBlock();
 
-		if (!won && !lost)
+		if (!won)
 		{
 			startTimer = true;
 			StartCoroutine("Timer");
-		}		
+		}
 
 		if (enemy.wasEffective)
 		{
@@ -155,18 +153,19 @@ public class Player : MonoBehaviour
 
 		if (enemysChosenAttack == 1)
 		{
-			hitEffectiveText.color = Color.red;
-			hitEffectiveText.text = "Block 1 was not effective!";
+			hitEffectiveText.color = Color.green;
+			hitEffectiveText.text = "Block 1 was effective!";			
 
 			wasEffective = true; // Enemy's attack was effective
-			Camera.main.GetComponent<Animator>().SetBool("Animate", true);
+			
 		}
 		else
 		{
-			hitEffectiveText.color = Color.green;
-			hitEffectiveText.text = "Block 1 was effective!";
+			hitEffectiveText.color = Color.red;
+			hitEffectiveText.text = "Block 1 was not effective!";
 
 			wasEffective = false;
+			Camera.main.GetComponent<Animator>().SetBool("Animate", true);
 		}
 	}
 
@@ -184,18 +183,18 @@ public class Player : MonoBehaviour
 
 		if (enemysChosenAttack == 2)
 		{
-			hitEffectiveText.color = Color.red;
-			hitEffectiveText.text = "Block 2 was not effective!";
+			hitEffectiveText.color = Color.green;
+			hitEffectiveText.text = "Block 2 was effective!";
 
-			wasEffective = true;
-			Camera.main.GetComponent<Animator>().SetBool("Animate", true);
+			wasEffective = true;			
 		}
 		else
 		{
 			hitEffectiveText.color = Color.red;
-			hitEffectiveText.text = "Block 2 was effective!";
+			hitEffectiveText.text = "Block 2 was not effective!";
 
 			wasEffective = false;
+			Camera.main.GetComponent<Animator>().SetBool("Animate", true);
 		}
 	}
 
@@ -206,7 +205,7 @@ public class Player : MonoBehaviour
 			if (startTimer)
 			{
 				startTimer = false;
-				if (!won && !lost)
+				if (!won)
 				{
 					yield return new WaitForSeconds(timerLength);
 				}
@@ -217,7 +216,7 @@ public class Player : MonoBehaviour
 			}
 			else
 			{
-				if (!won && !lost)
+				if (!won)
 				{
 					GetComponent<UIGame>().Defending();
 					Destroy(GameObject.FindGameObjectWithTag("Attack"));
@@ -225,16 +224,9 @@ public class Player : MonoBehaviour
 					StopCoroutine("Timer");
 					yield return null;
 				}
-
-				if (won)
+				else
 				{
 					GetComponent<UIGame>().Win();
-					yield return null;
-				}
-
-				if (lost)
-				{
-					GetComponent<UIGame>().Lose();
 					yield return null;
 				}
 			}

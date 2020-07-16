@@ -22,7 +22,6 @@ public class Enemy : MonoBehaviour
 	public bool wasEffective = false;
 
 	public Slider playerSlider;
-	public Slider enemySlider;
 
 	public float attack1Damage = 20f;
 	public float attack2Damage = 30f;
@@ -30,6 +29,7 @@ public class Enemy : MonoBehaviour
 	[SerializeField]
 	private float timerLength = 3f;
 
+	private bool lost = false;
 	private bool startTimer = true;
 
 	public void ChooseAttack()
@@ -55,8 +55,37 @@ public class Enemy : MonoBehaviour
 		Player player = GetComponent<Player>();
 		player.enemysChosenAttack = 1;
 
-		startTimer = true;
-		StartCoroutine("Timer");
+		if (!lost)
+		{
+			startTimer = true;
+			StartCoroutine("Timer");
+		}
+
+		if (player.wasEffective)
+		{
+			float randomisedDamage = Random.Range(-2.5f, 2.5f);
+			player.curHealth -= randomisedDamage + attack1Damage;
+		}
+		else
+		{
+			float randomisedDamage = Random.Range(-1f, 1f);
+			player.curHealth -= randomisedDamage + (attack1Damage / 3);
+		}
+
+		playerSlider.value = player.curHealth;
+
+		if (player.curHealth <= 0)
+		{
+			player.playerGameObject.GetComponent<Rigidbody>().isKinematic = false;
+			player.playerGameObject.GetComponent<Rigidbody>().WakeUp();
+			player.playerGameObject.GetComponent<Rigidbody>().sleepThreshold = 0f;
+			player.playerGameObject.transform.rotation = Quaternion.Euler(-1, 45, 0);
+
+			StopCoroutine("Timer");
+			lost = true;
+			startTimer = true;
+			StartCoroutine("Timer");
+		}
 	}
 
 	private void Attack2()
@@ -69,8 +98,40 @@ public class Enemy : MonoBehaviour
 		Player player = GetComponent<Player>();
 		player.enemysChosenAttack = 2;
 
-		startTimer = true;
-		StartCoroutine("Timer");
+		if (!lost)
+		{
+			startTimer = true;
+			StartCoroutine("Timer");
+		}
+
+		if (player.wasEffective)
+		{
+			float randomisedDamage = Random.Range(-5f, 5f);
+			player.curHealth -= randomisedDamage + attack2Damage;
+		}
+		else
+		{
+			player.curHealth += 5f;
+			if (player.curHealth > player.maxHealth)
+			{
+				player.curHealth = player.maxHealth;
+			}
+		}
+
+		playerSlider.value = player.curHealth;
+
+		if (player.curHealth <= 0)
+		{
+			player.playerGameObject.GetComponent<Rigidbody>().isKinematic = false;
+			player.playerGameObject.GetComponent<Rigidbody>().WakeUp();
+			player.playerGameObject.GetComponent<Rigidbody>().sleepThreshold = 0f;
+			player.playerGameObject.transform.rotation = Quaternion.Euler(-1, 45, 0);
+
+			StopCoroutine("Timer");
+			lost = true;
+			startTimer = true;
+			StartCoroutine("Timer");
+		}
 	}
 
 	public void ChooseBlock()
@@ -129,15 +190,30 @@ public class Enemy : MonoBehaviour
 			if (startTimer)
 			{
 				startTimer = false;
-				yield return new WaitForSeconds(timerLength);
+				if (!lost)
+				{					
+					yield return new WaitForSeconds(timerLength);
+				}
+				else
+				{
+					yield return new WaitForSeconds(5);
+				}
 			}
 			else
 			{
-				GetComponent<UIGame>().Attacking();
-				Destroy(GameObject.FindGameObjectWithTag("Attack"));
-				Destroy(GameObject.FindGameObjectWithTag("Block"));
-				StopCoroutine("Timer");
-				yield return null;
+				if (!lost)
+				{
+					GetComponent<UIGame>().Attacking();
+					Destroy(GameObject.FindGameObjectWithTag("Attack"));
+					Destroy(GameObject.FindGameObjectWithTag("Block"));
+					StopCoroutine("Timer");
+					yield return null;
+				}
+				else
+				{
+					GetComponent<UIGame>().Lose();
+					yield return null;
+				}
 			}
 		}
 	}
