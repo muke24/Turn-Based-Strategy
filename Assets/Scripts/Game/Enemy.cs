@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+//* Check the Player script for the code comments. 
+//* This script is very similar to the player script so it should include most of the same comments.
 public class Enemy : MonoBehaviour
 {
 	#region Variables
@@ -55,6 +57,9 @@ public class Enemy : MonoBehaviour
 	private bool startTimer = true;
 	#endregion
 
+	/// <summary>
+	/// Chooses a random attack then attacks with selected attack
+	/// </summary>
 	public void ChooseAttack()
 	{
 		int value = Random.Range(1, 3);
@@ -68,6 +73,9 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Attacks the player with "Attack 1"
+	/// </summary>
 	private void Attack1()
 	{
 		Instantiate(attact1, attackSpawnPos);
@@ -115,6 +123,9 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Attacks the player with "Attack 2"
+	/// </summary>
 	private void Attack2()
 	{
 		Instantiate(attact2, attackSpawnPos);
@@ -165,6 +176,9 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Chooses a random block then blocks with selected block
+	/// </summary>
 	public void ChooseBlock()
 	{
 		int value = Random.Range(1, 3);
@@ -178,6 +192,9 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Blocks the player's attack with "Block 1"
+	/// </summary>
 	private void Block1()
 	{
 		Instantiate(block1, blockSpawnPos);
@@ -196,6 +213,9 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Blocks the player's attack with "Block 2"
+	/// </summary>
 	private void Block2()
 	{
 		Instantiate(block2, blockSpawnPos);
@@ -214,6 +234,10 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Runs a timer, when the timer is finished it is the player's turn (or if the player is dead, player will lose the game)
+	/// </summary>
+	/// <returns></returns>
 	IEnumerator Timer()
 	{
 		while (true)

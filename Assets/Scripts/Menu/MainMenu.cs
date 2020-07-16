@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#region This code has been written by Peter Thompson
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
@@ -17,3 +18,5 @@ public class MainMenu : MonoBehaviour
 		#endif
 	}
 }
+//* This code has been written by Peter Thompson
+#endregion
