@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿#region This code has been written by Peter Thompson
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+	#region Variables
 	[Header("Player Health")]
 	public float maxHealth = 100f;
 	public float curHealth = 100f;
@@ -58,6 +60,8 @@ public class Player : MonoBehaviour
 	private bool startTimer = true;
 	//* Bool to check if player has won the game
 	private bool won = false;
+
+	#endregion
 
 	/// <summary>
 	/// Attacks the enemy with "Attack 1"
@@ -189,26 +193,30 @@ public class Player : MonoBehaviour
 	/// </summary>
 	public void Block1()
 	{
+		//* Creates the block prefab within the scene and parents it to the transform which is 
+		//* already in the scene that has its position/rotation set to face the enemy
 		Instantiate(block1, blockSpawnPos);
 
-		GameObject block = GameObject.FindGameObjectWithTag("Block");
-		block.transform.localPosition = Vector3.zero;
-		block.transform.localRotation = new Quaternion();
-
+		//* Assigns the enemy variable
 		Enemy enemy = GetComponent<Enemy>();
+		//* Sets the attack that the player just chose in the Enemy script
 		enemy.playersChosenBlock = 1;
+		//* Makes the enemy choose a random block
 		enemy.ChooseAttack();
 
+		//* If the block was effective then block set damage
 		if (wasEffective)
 		{
 			hitEffectiveText.color = Color.green;
 			hitEffectiveText.text = "Block 1 was effective!";
 		}
+		//* If the block was not effective then do not block set damage
 		else
 		{
 			hitEffectiveText.color = Color.red;
 			hitEffectiveText.text = "Block 1 was not effective!";
 
+			//* Animate camera shake
 			Camera.main.GetComponent<Animator>().SetBool("Animate", true);
 		}
 	}
@@ -218,52 +226,60 @@ public class Player : MonoBehaviour
 	/// </summary>
 	public void Block2()
 	{
+		//* Creates the block prefab within the scene and parents it to the transform which is 
+		//* already in the scene that has its position/rotation set to face the enemy
 		Instantiate(block2, blockSpawnPos);
 
-		GameObject block = GameObject.FindGameObjectWithTag("Block");
-		block.transform.localPosition = Vector3.zero;
-		block.transform.localRotation = new Quaternion();
-
+		//* Assigns the enemy variable
 		Enemy enemy = GetComponent<Enemy>();
+		//* Sets the attack that the player just chose in the Enemy script
 		enemy.playersChosenBlock = 2;
+		//* Makes the enemy choose a random block
 		enemy.ChooseAttack();
 
+		//* If the block was effective then block set damage
 		if (wasEffective)
 		{
 			hitEffectiveText.color = Color.green;
 			hitEffectiveText.text = "Block 2 was effective!";
 		}
+		//* If the block was not effective then do not block set damage
 		else
 		{
 			hitEffectiveText.color = Color.red;
 			hitEffectiveText.text = "Block 2 was not effective!";
 
+			//* Animate camera shake
 			Camera.main.GetComponent<Animator>().SetBool("Animate", true);
 		}
 	}
 
 	/// <summary>
-	/// Runs a timer, when the timer is finished it is the enemy's turn
+	/// Runs a timer, when the timer is finished it is the enemy's turn (or if the enemy is dead, player will win the game)
 	/// </summary>
 	/// <returns></returns>
 	IEnumerator Timer()
 	{
 		while (true)
 		{
+			//* If the coroutine is called for its first time then ignore the enemy's play
 			if (startTimer)
 			{
 				startTimer = false;
 				if (!won)
 				{
+					//* Wait for the amount of time the timerLength float is set to to call the coroutine again
 					yield return new WaitForSeconds(timerLength);
 				}
 				else
 				{
+					//* Wait for 5 seconds to call the coroutine again and play the enemy's move
 					yield return new WaitForSeconds(5);
 				}
 			}
 			else
 			{
+				// Enemy's turn to attack
 				if (!won)
 				{
 					GetComponent<UIGame>().Defending();
@@ -272,6 +288,7 @@ public class Player : MonoBehaviour
 					StopCoroutine("Timer");
 					yield return null;
 				}
+				// Player has won the game
 				else
 				{
 					GetComponent<UIGame>().Win();
@@ -281,3 +298,5 @@ public class Player : MonoBehaviour
 		}
 	}
 }
+//* This code has been written by Peter Thompson
+#endregion

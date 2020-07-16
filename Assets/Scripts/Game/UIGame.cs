@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿#region This code has been written by Peter Thompson
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UIGame : MonoBehaviour
 {
+	#region Variables
+	[Header("UI GameObjects")]
 	public GameObject playerPanel;
 	public GameObject enemyPanel;
 	public GameObject playerCanv;
@@ -13,7 +16,11 @@ public class UIGame : MonoBehaviour
 
 	[SerializeField]
 	private Text playerDoText = null;
+	#endregion
 
+	/// <summary>
+	/// Displays the attack buttons
+	/// </summary>
 	public void Attacking()
 	{
 		enemyPanel.SetActive(false);
@@ -21,6 +28,9 @@ public class UIGame : MonoBehaviour
 		playerDoText.text = "Choose an attack";
 	}
 
+	/// <summary>
+	/// Changes the "PlayerDoText" while attacking the enemy
+	/// </summary>
 	public void IsAttacking()
 	{
 		if (GetComponent<Enemy>().playersChosenAttack == 1)
@@ -33,6 +43,9 @@ public class UIGame : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Displays the block buttons
+	/// </summary>
 	public void Defending()
 	{
 		playerPanel.SetActive(false);
@@ -40,6 +53,9 @@ public class UIGame : MonoBehaviour
 		playerDoText.text = "Choose a block";
 	}
 
+	/// <summary>
+	/// Changes the "PlayerDoText" while blocking the enemy's attack
+	/// </summary>
 	public void IsDefending()
 	{
 		if (GetComponent<Enemy>().playersChosenBlock == 1)
@@ -52,6 +68,9 @@ public class UIGame : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Wins the game
+	/// </summary>
 	public void Win()
 	{
 		playerCanv.SetActive(false);
@@ -60,6 +79,9 @@ public class UIGame : MonoBehaviour
 		win.SetActive(true);
 	}
 
+	/// <summary>
+	/// Loses the game
+	/// </summary>
 	public void Lose()
 	{
 		playerCanv.SetActive(false);
@@ -68,3 +90,5 @@ public class UIGame : MonoBehaviour
 		lose.SetActive(true);
 	}
 }
+//* This code has been written by Peter Thompson
+#endregion

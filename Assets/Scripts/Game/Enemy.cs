@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿#region This code has been written by Peter Thompson
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+	#region Variables
 	[Header("Enemy Health")]
 	public float maxHealth = 100f;
 	public float curHealth = 100f;
@@ -51,6 +53,7 @@ public class Enemy : MonoBehaviour
 
 	private bool lost = false;
 	private bool startTimer = true;
+	#endregion
 
 	public void ChooseAttack()
 	{
@@ -246,3 +249,5 @@ public class Enemy : MonoBehaviour
 		}
 	}
 }
+//* This code has been written by Peter Thompson
+#endregion
