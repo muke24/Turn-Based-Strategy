@@ -97,14 +97,14 @@ public class Enemy : MonoBehaviour
 			float randomisedDamage = Random.Range(-2.5f, 2.5f);
 			player.curHealth -= randomisedDamage + attack1Damage;
 
-			player.wasEffective = false;
+			player.wasEffective = true;
 		}
 		else
 		{
 			float randomisedDamage = Random.Range(-1f, 1f);
 			player.curHealth -= randomisedDamage + (attack1Damage / 3);
 
-			player.wasEffective = true;
+			player.wasEffective = false;
 		}
 
 		playerSlider.value = player.curHealth;
@@ -147,7 +147,7 @@ public class Enemy : MonoBehaviour
 			float randomisedDamage = Random.Range(-5f, 5f);
 			player.curHealth -= randomisedDamage + attack2Damage;
 
-			player.wasEffective = false;
+			player.wasEffective = true;
 		}
 		else
 		{
@@ -157,7 +157,7 @@ public class Enemy : MonoBehaviour
 				player.curHealth = player.maxHealth;
 			}
 
-			player.wasEffective = true;
+			player.wasEffective = false;
 		}
 
 		playerSlider.value = player.curHealth;

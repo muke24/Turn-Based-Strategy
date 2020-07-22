@@ -93,6 +93,7 @@ public class Player : MonoBehaviour
 			hitEffectiveText.text = "Attack 1 was effective!";
 			Debug.Log("Hit was effective");
 		}
+
 		//* If the attack was not effective then deal a small amount of damage
 		else
 		{
